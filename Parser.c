@@ -12,13 +12,19 @@ enum COMMAND{
 	hint,
 	validate,
 	restart,
-	exit,
+	exit1,
 	error
 };
 
 
 
 void parseCommand(char* command, int* result){
+	/***************************************************************
+	 * get array of chars which represent the command from the user*
+	 * and change the result array accordingly. the first variable *
+	 * in the result array is the command type and the rest are the*
+	 * parameters for the command                                  *
+	 ***************************************************************/
 	const char delim[1] = " ";
 	char *token;
 	token = strtok(command,delim);
@@ -33,7 +39,7 @@ void parseCommand(char* command, int* result){
 	}else if(strcmp(token,"restart") == 0){
 		result[0] = restart;
 	}else if(strcmp(token,"exit") == 0){
-		result[0] = exit;
+		result[0] = exit1;
 	}else{
 		result[0] = error;
 	}

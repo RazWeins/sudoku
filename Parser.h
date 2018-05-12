@@ -13,7 +13,7 @@ enum COMMAND{
 	hint,
 	validate,
 	restart,
-	exit,
+	exit1,
 	error
 };
 
