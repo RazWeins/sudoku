@@ -5,10 +5,10 @@
  *      Author: beniz
  */
 
-#include "Solver.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "Solver.h"
 #include "SPBufferset.h"
 
 void printBoard(Cell** table, int blockRowSize, int blockColSize){
