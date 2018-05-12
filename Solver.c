@@ -34,7 +34,7 @@ void printBoard(Cell** table, int blockRowSize, int blockColSize){
 				printf("%s", "| ");
 			}
 			if(currentNum == 0){
-				printf("%c", ' ');
+				printf("%s", "  ");
 			}
 			if(table[i][j].fixed == 1){
 				sprintf(strInt, "%d", currentNum);
@@ -65,23 +65,6 @@ void resetCell(Cell** table, int cellRow, int cellCol){
 		table[cellRow][cellCol].prevNums[i] = 0;
 	}
 
-}
-/* initializes board iwth zeros */
-void boardInit(Cell** table, int boardRow, int boardCol){
-	int i, j, k;
-	for(i = 0; i < boardRow; i++){
-		for(j = 0; j < boardCol; j++){
-
-			for (k = 0; k < 9; k++) {/* initializes prevNums as not used nums*/
-				table[i][j].prevNums[k] = 0;
-			}
-
-			table[i][j].currentNum = 0;
-			table[i][j].fixed = 0;
-			table[i][j].limit = 9;
-
-		}
-	}
 }
 
 /* updates a cell with a valid numbers */
@@ -264,4 +247,64 @@ int rndBacktrackWrap(Cell** table, int blockRowSize, int blockColSize){
 	return rndBacktrack(table, 0, 0, blockRowSize, blockColSize, boardSize);
 }
 
+/* deterministic backtrack algorithm */
+int dtrBacktrack(Cell** table, int cellRow, int cellCol, int blockRowSize, int blockColSize, int boardSize){
+	int limit;
+	int numIndex;
+	int x;
 
+	if(table[cellRow][cellCol].fixed == 1 || table[cellRow][cellCol].isInput == 1){
+		if(cellCol < boardSize - 1){
+			x = dtrBacktrack(table, cellRow, cellCol + 1, blockRowSize, blockColSize, boardSize);
+			return x;
+		}
+		else if(cellRow < boardSize - 1){
+			x = dtrBacktrack(table, cellRow + 1, 0, blockRowSize, blockColSize, boardSize);
+			return x;
+		}else{
+			return -1; /* got to last cell and it's fixed\input */
+		}
+	}else{
+		availableNumbers(table, cellRow, cellCol, blockRowSize, blockColSize);
+		limit = table[cellRow][cellCol].limit;
+
+		if(limit == 0){
+			resetCell(table, cellRow, cellCol);
+			return 0; /* got stuck need to trackback */
+		}
+
+		while(limit != 0) { /* keep looping through valid numbers */
+			availableNumbers(table, cellRow, cellCol, blockRowSize, blockColSize);
+			limit = table[cellRow][cellCol].limit;
+			if(limit == 0){
+				resetCell(table, cellRow, cellCol);
+				return 0;
+			}
+			numIndex = 0;
+			updateCell(table, numIndex, cellRow, cellCol);
+			if(cellCol < boardSize - 1){
+				x = dtrBacktrack(table, cellRow, cellCol + 1, blockRowSize, blockColSize, boardSize);
+				if(x == -1){
+					return -1;
+				}
+			}else if(cellRow < boardSize - 1){
+				x = dtrBacktrack(table, cellRow + 1, 0, blockRowSize, blockColSize, boardSize);
+				if(x == -1){
+					return -1;
+				}
+			}else{
+				/* got to the last cell */
+				return -1;
+			}
+		}
+		return -1;
+	}
+ return -1;
+}
+
+/* wrapper for the deterministic backtrack algorithm */
+int dtrBacktrackWrap(Cell** table, int blockRowSize, int blockColSize){
+
+	int boardSize = blockRowSize * blockColSize;
+	return dtrBacktrack(table, 0, 0, blockRowSize, blockColSize, boardSize);
+}

@@ -9,10 +9,9 @@
 #define SOLVER_H_
 #include "Cell.h"
 
-
-void boardInit(Cell** table, int boardRowSize, int boardColSize);
-
 int rndBacktrackWrap(Cell** table, int blockRowSize, int blockColSize);
+
+int dtrBacktrackWrap(Cell** table, int blockRowSize, int blockColSize);
 
 void printBoard(Cell** table, int blockRowSize, int blockColSize);
 

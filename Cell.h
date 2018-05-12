@@ -13,6 +13,7 @@ struct _Cell
 	int currentNum;
 	int fixed;
 	int limit;
+	int isInput;
 	int validNums[9];
 	int prevNums[9];
 };
