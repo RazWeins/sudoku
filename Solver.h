@@ -9,14 +9,13 @@
 #define SOLVER_H_
 #include "Cell.h"
 
-int rndBacktrackWrap(Cell** table, int blockRowSize, int blockColSize);
+/* generates a new sudoku puzzle using the random backtracking algorithm.
+ * input:table: intialized 2d array */
+void sudokuGenerator(Cell** table, int blockRowSize, int blockColSize);
 
 int dtrBacktrackWrap(Cell** table, int blockRowSize, int blockColSize);
 
-void printBoard(Cell** table, int blockRowSize, int blockColSize);
-
 int validAssignment(Cell** table, int numToCheck, int cellRow, int cellCol, int blockRowSize, int blockColSize);
 
-void printBoard(Cell** table, int blockRowSize, int blockColSize);
 
 #endif /* SOLVER_H_ */

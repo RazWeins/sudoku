@@ -25,7 +25,7 @@ void parseCommand(char* input, int* command){
 	 * in the result array is the command type and the rest are the*
 	 * parameters for the command                                  *
 	 ***************************************************************/
-	const char delim[1] = " ";
+	const char delim[7] = " \t\r\n";
 	char *token;
 	token = strtok(input,delim);
 	/* Get the command type */
@@ -43,16 +43,16 @@ void parseCommand(char* input, int* command){
 		printf("%s", "Error: invalid command\n");
 		command[0] = error;
 	}
+	token = strtok(NULL,delim);
 	if(token!= NULL){
-		token = strtok(NULL,delim);
 		sscanf(token, "%d", &command[2]);
 	}
+	token = strtok(NULL,delim);
 	if(token!= NULL){
-		token = strtok(NULL,delim);
 		sscanf(token, "%d", &command[1]);
 	}
+	token = strtok(NULL,delim);
 	if(token!= NULL){
-		token = strtok(NULL,delim);
 		sscanf(token, "%d", &command[3]);
 	}
 }

@@ -10,51 +10,8 @@
 #include <string.h>
 #include "Solver.h"
 #include "SPBufferset.h"
+#include "def.h"
 
-void printBoard(Cell** table, int blockRowSize, int blockColSize){
-	int i, j;
-	int boardColSize = blockColSize * blockRowSize;
-	int boardRowSize = boardColSize;
-	char strNonFixed[3];
-	char strFixed[3];
-	char strInt[2];
-	int currentNum;
-
-	for(i = 0; i < boardRowSize; i++){
-		if(i % blockRowSize == 0){
-			printf("%s", "----------------------------------\n");
-		}
-		for(j = 0; j < boardColSize; j++){
-			strNonFixed[0] = ' ';
-			strNonFixed[1] = '\0';
-			strFixed[0] = '.';
-			strFixed[1] = '\0';
-			currentNum = table[i][j].currentNum;
-			if(j % blockColSize == 0){
-				printf("%s", "| ");
-			}
-			if(currentNum == 0){
-				printf("%s", "  ");
-			}
-			if(table[i][j].fixed == 1){
-				sprintf(strInt, "%d", currentNum);
-				strcat(strFixed, strInt);
-				printf("%s", strFixed);
-			}
-			if((table[i][j].fixed == 0) && (currentNum != 0)){
-				sprintf(strInt, "%d", currentNum);
-				strcat(strNonFixed, strInt);
-				printf("%s", strNonFixed);
-			}
-			if(j == boardColSize - 1){
-				printf("%s", " |");
-			}
-			printf("%s", " ");
-		}
-		printf("%s", "\n");
-	}
-	printf("%s", "----------------------------------\n");
-}
 
 /* resets cell num to 0 */
 void resetCell(Cell** table, int cellRow, int cellCol){
@@ -241,10 +198,10 @@ int rndBacktrack(Cell** table, int cellRow, int cellCol, int blockRowSize, int b
 }
 
 /* wrapper for the random backtrack algorithm */
-int rndBacktrackWrap(Cell** table, int blockRowSize, int blockColSize){
+void sudokuGenerator(Cell** table, int blockRowSize, int blockColSize){
 
 	int boardSize = blockRowSize * blockColSize;
-	return rndBacktrack(table, 0, 0, blockRowSize, blockColSize, boardSize);
+	rndBacktrack(table, 0, 0, blockRowSize, blockColSize, boardSize);
 }
 
 /* deterministic backtrack algorithm */

@@ -11,6 +11,51 @@
 #include "Game.h"
 #include "Solver.h"
 
+void printBoard(Cell** table, int blockRowSize, int blockColSize){
+	int i, j;
+	int boardColSize = blockColSize * blockRowSize;
+	int boardRowSize = boardColSize;
+	char strNonFixed[3];
+	char strFixed[3];
+	char strInt[2];
+	int currentNum;
+
+	for(i = 0; i < boardRowSize; i++){
+		if(i % blockRowSize == 0){
+			printf("%s", "----------------------------------\n");
+		}
+		for(j = 0; j < boardColSize; j++){
+			strNonFixed[0] = ' ';
+			strNonFixed[1] = '\0';
+			strFixed[0] = '.';
+			strFixed[1] = '\0';
+			currentNum = table[i][j].currentNum;
+			if(j % blockColSize == 0){
+				printf("%s", "| ");
+			}
+			if(currentNum == 0){
+				printf("%s", "  ");
+			}
+			if(table[i][j].fixed == 1){
+				sprintf(strInt, "%d", currentNum);
+				strcat(strFixed, strInt);
+				printf("%s", strFixed);
+			}
+			if((table[i][j].fixed == 0) && (currentNum != 0)){
+				sprintf(strInt, "%d", currentNum);
+				strcat(strNonFixed, strInt);
+				printf("%s", strNonFixed);
+			}
+			if(j == boardColSize - 1){
+				printf("%s", " |");
+			}
+			printf("%s", " ");
+		}
+		printf("%s", "\n");
+	}
+	printf("%s", "----------------------------------\n");
+}
+
 /* initializes board with zeros */
 void boardInit(Cell** table, int blockRowSize, int blockColSize){
 	int i, j, k;
@@ -67,10 +112,11 @@ void createGameBoard(Cell** gameBoard, Cell** solvedBoard, int blockRowSize, int
 	}
 }
 
-void initGame(Cell** gameBoard, Cell** solvedBoard, int blockRowSize, int blockColSize, int amountOfHints){
+void puzzleGeneration(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int blockRowSize, int blockColSize, int amountOfHints){
 	boardInit(gameBoard, blockRowSize, blockColSize);
 	boardInit(solvedBoard, blockRowSize, blockColSize);
-	rndBacktrackWrap(solvedBoard, blockRowSize, blockColSize);
+	boardInit(tempBoard, blockRowSize, blockColSize);
+	sudokuGenerator(solvedBoard, blockRowSize, blockColSize);
 	setHints(solvedBoard, amountOfHints, blockRowSize, blockColSize);
 	createGameBoard(gameBoard, solvedBoard, blockRowSize, blockColSize);
 }
@@ -102,7 +148,6 @@ int setCell(Cell** table, int cellRow, int cellCol, int cellValue, int blockRowS
 			if(validAssignment(table, cellValue, cellRow - 1, cellCol - 1, blockRowSize, blockColSize) == 0){
 				table[cellRow - 1][cellCol - 1].currentNum = cellValue;
 				table[cellRow - 1][cellCol - 1].isInput = 1;
-				printBoard(table, blockRowSize, blockColSize);
 				if(isSolved(table, blockRowSize, blockColSize)){
 					printf("%s","Puzzle solved successfully\n");
 					return 1;
@@ -121,9 +166,9 @@ int setCell(Cell** table, int cellRow, int cellCol, int cellValue, int blockRowS
 	return 0;
 }
 
-/* returns hint at (cellRow,cellCol). table is solvedBoard */
-void hintCell(Cell** table, int cellRow, int cellCol){
-	int hint = table[cellRow - 1][cellCol - 1].currentNum;
+/* returns hint at (cellRow,cellCol).*/
+void hintCell(Cell** solvedBoard, int cellRow, int cellCol){
+	int hint = solvedBoard[cellRow - 1][cellCol - 1].currentNum;
 
 	printf("%s", "Hint: set cell to ");
 	printf("%d", hint);
@@ -145,10 +190,8 @@ void copyBoard(Cell** dstBoard, Cell** srcBoard, int blockRowSize, int blockColS
 	}
 }
 
-void validateBoard(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard,int blockRowSize, int blockColSize){
+void validateBoard(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int blockRowSize, int blockColSize){
 	int solveFlag;
-
-	boardInit(tempBoard, blockRowSize, blockColSize);
 
 	copyBoard(tempBoard, gameBoard, blockRowSize, blockColSize);
 
@@ -166,5 +209,6 @@ void exitGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard){
 	free(solvedBoard);
 	free(tempBoard);
 
-	printf("%s","Exiting…\n");
+	printf("%s","Exiting...\n");
+	exit(0);
 }
