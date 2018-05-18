@@ -9,13 +9,11 @@
 #include "SPBufferset.h"
 #include "MainAux.h"
 #include "Cell.h"
-
+#include "def.h"
 int main() {
 
 	/* Declarations */
-	int blockRowSize = 3;
-	int blockColSize = 3;
-	int boardRowSize = blockColSize * blockRowSize;
+	int boardRowSize = BLOCK_COL_SIZE * BLOCK_ROW_SIZE;
 	int boardColSize = boardRowSize;
 	int i;
 
@@ -35,7 +33,7 @@ int main() {
 		tempBoard[i] = (Cell *) malloc(boardColSize * sizeof(Cell));
 	}
 
-	gameLoop(gameBoard, solvedBoard, tempBoard, blockRowSize, blockColSize);
+	gameLoop(gameBoard, solvedBoard, tempBoard);
 
 	return 0;
 }

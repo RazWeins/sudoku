@@ -30,8 +30,7 @@ int getInput(char input[], int command[]) {
 
 /* gets the number of hints from the user and initialize the boards accordingly
  * if EOF was entering the function returns -1, else 0*/
-int initGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard,
-		int blockRowSize, int blockColSize) {
+int initGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard) {
 	char input[1024];
 	int numOfHint;
 	printf("%s", "Please enter the number of cells to fill [0-80]:\n");
@@ -47,27 +46,23 @@ int initGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard,
 		fgets(input, 1024, stdin);
 		sscanf(input, "%d", &numOfHint);
 	}
-	puzzleGeneration(gameBoard, solvedBoard, tempBoard, blockRowSize,
-			blockColSize, numOfHint);
+	puzzleGeneration(gameBoard, solvedBoard, tempBoard, numOfHint);
 	return 0;
 }
 
-void commmandRouter(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard,
-		int blockRowSize, int blockColSize, int command[]) {
+void commmandRouter(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int command[]) {
 	switch (command[0]) {
 	case 0:/* Set X Y Z */
-		setCell(gameBoard, command[1], command[2], command[3], blockRowSize,
-				blockColSize);
+		setCell(gameBoard, command[1], command[2], command[3]);
 		break;
 	case 1: /* Hint X Y */
 		hintCell(solvedBoard, command[1], command[2]);
 		break;
 	case 2: /* validate */
-		validateBoard(gameBoard, solvedBoard, tempBoard, blockRowSize,
-				blockColSize);
+		validateBoard(gameBoard, solvedBoard, tempBoard);
 		break;
 	case 3:/* restart */
-		initGame(gameBoard, solvedBoard, tempBoard, blockRowSize, blockColSize);
+		initGame(gameBoard, solvedBoard, tempBoard);
 		break;
 	case 4:
 		exitGame(gameBoard, solvedBoard, tempBoard);
@@ -75,20 +70,19 @@ void commmandRouter(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard,
 	}
 }
 
-void gameLoop(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int blockRowSize, int blockColSize) {
+void gameLoop(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard) {
 	char input[1024];
 	int command[4];
 	int exitFlag = 0;
-	if (initGame(gameBoard, solvedBoard, tempBoard, blockRowSize, blockColSize) == -1) {
+	if (initGame(gameBoard, solvedBoard, tempBoard) == -1) {
 		/* EOF CASE */
 		exitGame(gameBoard, solvedBoard, tempBoard);
 	}
-	printBoard(gameBoard, blockRowSize, blockColSize);
+	printBoard(gameBoard);
 	while (exitFlag == 0) {
 		exitFlag = getInput(input, command);
-		commmandRouter(gameBoard, solvedBoard, tempBoard, blockRowSize,
-				blockColSize, command);
-		printBoard(gameBoard, blockRowSize, blockColSize);
+		commmandRouter(gameBoard, solvedBoard, tempBoard, command);
+		printBoard(gameBoard);
 	}
 }
 

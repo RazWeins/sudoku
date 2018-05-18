@@ -10,6 +10,6 @@
 #include "Cell.h"
 
 
-void gameLoop(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int blockRowSize, int blockColSize);
+void gameLoop(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard);
 
 #endif /* MAINAUX_H_ */

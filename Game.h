@@ -10,18 +10,18 @@
 #include "Solver.h"
 #include "Cell.h"
 
-void printBoard(Cell** table, int blockRowSize, int blockColSize);
+void printBoard(Cell** table);
 
-void boardInit(Cell** table, int boardRowSize, int boardColSize);
+void boardInit(Cell** table);
 
-int setCell(Cell** table, int cellRow, int cellCol, int cellValue, int blockRowSize, int blockColSize);
+int setCell(Cell** table, int cellRow, int cellCol, int cellValue);
 
 void hintCell(Cell** table, int cellRow, int cellCol);
 
-void validateBoard(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard,int blockRowSize, int blockColSize);
+void validateBoard(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard);
 
 void exitGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard);
 
-void puzzleGeneration(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int blockRowSize, int blockColSize, int amountOfHints);
+void puzzleGeneration(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int amountOfHints);
 
 #endif /* GAME_H_ */
