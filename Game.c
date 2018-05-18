@@ -9,6 +9,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "Game.h"
+#include "Solver.h"
 
 /* initializes board with zeros */
 void boardInit(Cell** table, int blockRowSize, int blockColSize){
@@ -47,6 +48,7 @@ void setHints(Cell** table, int amountOfHints, int blockRowSize, int blockColSiz
 	}
 }
 
+/* making the board ready for a game, setting fixed numbers */
 void createGameBoard(Cell** gameBoard, Cell** solvedBoard, int blockRowSize, int blockColSize){
 	int i, j;
 	int isFixed;
@@ -65,40 +67,104 @@ void createGameBoard(Cell** gameBoard, Cell** solvedBoard, int blockRowSize, int
 	}
 }
 
-void createBoards(Cell** gameBoard, Cell** solvedBoard, int blockRowSize, int blockColSize, int amountOfHints){
-	int success;
+void initGame(Cell** gameBoard, Cell** solvedBoard, int blockRowSize, int blockColSize, int amountOfHints){
 	boardInit(gameBoard, blockRowSize, blockColSize);
 	boardInit(solvedBoard, blockRowSize, blockColSize);
 	rndBacktrackWrap(solvedBoard, blockRowSize, blockColSize);
 	setHints(solvedBoard, amountOfHints, blockRowSize, blockColSize);
 	createGameBoard(gameBoard, solvedBoard, blockRowSize, blockColSize);
-	printBoard(gameBoard, blockRowSize, blockColSize);
-	success = dtrBacktrackWrap(gameBoard, blockRowSize, blockColSize);
-	printf("%s", "\n");
-	if(success == -1){
-		printf("%s", "there's a solution");
-	}else{
-		printf("%s", "there's no solution");
-	}
-	printf("%s", "\n");
-	printBoard(gameBoard, blockRowSize, blockColSize);
-
 }
 
-/*char* getStatus(){  prints current status of the board
-*	return 0;
-*}
-*
-*int isValid(){ returns 0-invalid 1-valid
-*	return 0;
-*}
-*
-*char hint(int X, int Y){ returns a hint for cell X,Y
-*	return 'a';
-*}
-*
-*int setCell(int X, int Y, int Z){ sets cell X,Y with value Z
-*	return 0;
-*}
-*/
+int isSolved(Cell** table, int blockRowSize, int blockColSize){
+	int i, j;
+	int boardRow = blockRowSize * blockColSize;
+	int boardCol = boardRow;
 
+	for(i = 0; i < boardRow; i++){
+		for(j = 0; j < boardCol; j++){
+			if(table[i][j].currentNum == 0){
+				return 0;
+			}
+		}
+	}
+	return 1;
+}
+
+/* updates a cell with a valid numbers, returns 1 if board is solved else returns 0 */
+int setCell(Cell** table, int cellRow, int cellCol, int cellValue, int blockRowSize, int blockColSize){
+	int fixedFlag = table[cellRow - 1][cellCol - 1].fixed;
+	if(!fixedFlag){
+		if(cellValue == 0){
+			table[cellRow - 1][cellCol - 1].currentNum = 0;
+			table[cellRow - 1][cellCol - 1].isInput = 0;
+			return 0;
+		}else{
+			if(validAssignment(table, cellValue, cellRow - 1, cellCol - 1, blockRowSize, blockColSize) == 0){
+				table[cellRow - 1][cellCol - 1].currentNum = cellValue;
+				table[cellRow - 1][cellCol - 1].isInput = 1;
+				printBoard(table, blockRowSize, blockColSize);
+				if(isSolved(table, blockRowSize, blockColSize)){
+					printf("%s","Puzzle solved successfully\n");
+					return 1;
+				}else{
+					return 0;
+				}
+			}else{
+				printf("%s","Error: value is invalid\n");
+				return 0;
+			}
+		}
+	}else{
+		printf("%s","Error: cell is fixed\n");
+		return 0;
+	}
+	return 0;
+}
+
+/* returns hint at (cellRow,cellCol). table is solvedBoard */
+void hintCell(Cell** table, int cellRow, int cellCol){
+	int hint = table[cellRow - 1][cellCol - 1].currentNum;
+
+	printf("%s", "Hint: set cell to ");
+	printf("%d", hint);
+	printf("%s", "\n");
+}
+
+/* copies the actual values of one board to another board */
+void copyBoard(Cell** dstBoard, Cell** srcBoard, int blockRowSize, int blockColSize){
+	int i, j;
+	int boardRow = blockRowSize * blockColSize;
+	int boardCol = boardRow;
+
+	for(i = 0; i < boardRow; i++){
+		for(j = 0; j < boardCol; j++){
+			dstBoard[i][j].currentNum = srcBoard[i][j].currentNum;
+			dstBoard[i][j].fixed = srcBoard[i][j].fixed;
+			dstBoard[i][j].isInput = srcBoard[i][j].isInput;
+		}
+	}
+}
+
+void validateBoard(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard,int blockRowSize, int blockColSize){
+	int solveFlag;
+
+	boardInit(tempBoard, blockRowSize, blockColSize);
+
+	copyBoard(tempBoard, gameBoard, blockRowSize, blockColSize);
+
+	solveFlag = dtrBacktrackWrap(tempBoard, blockRowSize, blockColSize);
+	if(solveFlag == 0){
+		printf("%s","Validation failed: board is unsolvable\n");
+	}else{
+		copyBoard(solvedBoard, tempBoard, blockRowSize, blockColSize);
+		printf("%s","Validation passed: board is solvable\n");
+	}
+}
+
+void exitGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard){
+	free(gameBoard);
+	free(solvedBoard);
+	free(tempBoard);
+
+	printf("%s","Exiting…\n");
+}

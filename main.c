@@ -27,10 +27,17 @@ int main(){
 
 	Cell** gameBoard = NULL;
 	Cell** solvedBoard = NULL;
+	Cell** tempBoard = NULL;
+
 	SP_BUFF_SET();
 	srand(1);
 
 	parseCommand(testArray, currentCommand);
+
+	tempBoard = (Cell **)malloc(boardRowSize * sizeof(Cell*));
+	for(i = 0; i < boardRowSize; i++){
+		solvedBoard[i] = (Cell *)malloc(boardColSize * sizeof(Cell));
+	}
 
 	gameBoard = (Cell **)malloc(boardRowSize * sizeof(Cell*));
 	for(i = 0; i < boardRowSize; i++){

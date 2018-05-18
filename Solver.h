@@ -1,7 +1,7 @@
 /*
  * Solver.h
  *
- *  Created on: 11 боай 2018
+ *  Created on: 11 пїЅпїЅпїЅпїЅ 2018
  *      Author: beniz
  */
 
@@ -12,6 +12,10 @@
 int rndBacktrackWrap(Cell** table, int blockRowSize, int blockColSize);
 
 int dtrBacktrackWrap(Cell** table, int blockRowSize, int blockColSize);
+
+void printBoard(Cell** table, int blockRowSize, int blockColSize);
+
+int validAssignment(Cell** table, int numToCheck, int cellRow, int cellCol, int blockRowSize, int blockColSize);
 
 void printBoard(Cell** table, int blockRowSize, int blockColSize);
 

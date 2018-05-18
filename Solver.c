@@ -1,7 +1,7 @@
 /*
  * Solver.c
  *
- *  Created on: 11 боай 2018
+ *  Created on: 11 пїЅпїЅпїЅпїЅ 2018
  *      Author: beniz
  */
 
