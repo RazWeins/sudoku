@@ -17,7 +17,9 @@ enum COMMAND{
 	error
 };
 
-void parseCommand(char* command, int* result);
+void parseCommand(char* input, int* command);
+
+int validInput(int* command);
 
 
 #endif /* PARSER_H_ */

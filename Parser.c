@@ -18,7 +18,7 @@ enum COMMAND{
 
 
 
-void parseCommand(char* command, int* result){
+void parseCommand(char* input, int* command){
 	/***************************************************************
 	 * get array of chars which represent the command from the user*
 	 * and change the result array accordingly. the first variable *
@@ -27,36 +27,65 @@ void parseCommand(char* command, int* result){
 	 ***************************************************************/
 	const char delim[1] = " ";
 	char *token;
-	token = strtok(command,delim);
-
+	token = strtok(input,delim);
 	/* Get the command type */
 	if(strcmp(token,"set") == 0){
-		result[0] = set;
+		command[0] = set;
 	}else if(strcmp(token,"hint") == 0){
-		result[0] = hint;
+		command[0] = hint;
 	}else if(strcmp(token,"validate") == 0){
-		result[0] = validate;
+		command[0] = validate;
 	}else if(strcmp(token,"restart") == 0){
-		result[0] = restart;
+		command[0] = restart;
 	}else if(strcmp(token,"exit") == 0){
-		result[0] = exit1;
+		command[0] = exit1;
 	}else{
-		result[0] = error;
+		printf("%s", "Error: invalid command\n");
+		command[0] = error;
 	}
+	if(token!= NULL){
+		token = strtok(NULL,delim);
+		sscanf(token, "%d", &command[2]);
+	}
+	if(token!= NULL){
+		token = strtok(NULL,delim);
+		sscanf(token, "%d", &command[1]);
+	}
+	if(token!= NULL){
+		token = strtok(NULL,delim);
+		sscanf(token, "%d", &command[3]);
+	}
+}
 
-	if(token!= NULL){
-		token = strtok(NULL,delim);
-		result[1] = token[0] - 48;
-	}
-	if(token!= NULL){
-		token = strtok(NULL,delim);
-		result[2] = token[0] - 48;
-	}
-	if(token!= NULL){
-		token = strtok(NULL,delim);
-		result[3] = token[0] - 48;
-	}
 
+
+/* check if the input is in the correct range or if error accrued
+ * return 0 if yes or -1 if not */
+int validInput(int* command){
+	if(command[0] == 5){
+		return -1;
+	}
+	if(command[0] == 0){
+		/* check that the arguments for the SET command are in the correct range */
+		if((command[1] < 1) || (command[1] > 9)){
+			return -1;
+		}
+		if((command[2] < 1) || (command[2] > 9)){
+			return -1;
+		}
+		if((command[3] < 0) || (command[3] > 9)){
+			return -1;
+		}
+	}else if(command[0] == 1){
+		/* check that the arguments for the SET command are in the correct range */
+		if((command[1] < 1) || (command[1] > 9)){
+			return -1;
+		}
+		if((command[2] < 1) || (command[2] > 9)){
+			return -1;
+		}
+	}
+	return 0;
 }
 
 
