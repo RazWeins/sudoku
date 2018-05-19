@@ -70,6 +70,7 @@ int initGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard) {
 		sscanf(input, "%d", &numOfHint);
 	}
 	puzzleGeneration(gameBoard, solvedBoard, tempBoard, numOfHint);
+	printBoard(gameBoard);
 	return 0;
 }
 
@@ -101,11 +102,9 @@ void gameLoop(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard) {
 		/* EOF CASE */
 		exitGame(gameBoard, solvedBoard, tempBoard);
 	}
-	printBoard(gameBoard);
 	while (exitFlag == 0) {
 		exitFlag = getInput(input, command);
 		commmandRouter(gameBoard, solvedBoard, tempBoard, command);
-		printBoard(gameBoard);
 	}
 }
 

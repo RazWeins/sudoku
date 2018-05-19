@@ -192,7 +192,7 @@ int rndBacktrack(Cell** table, int cellRow, int cellCol, int boardSize){
 		if( limit == 1 ){
 			rndIndex = 0;
 		}else{
-			rndIndex = (rand() % limit);
+			rndIndex = (rand()  % limit);
 		}
 		updateCell(table, rndIndex, cellRow, cellCol);
 		if(cellCol < boardSize - 1){

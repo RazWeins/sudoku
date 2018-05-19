@@ -85,8 +85,8 @@ void setHints(Cell** table, int amountOfHints){
 	int boardColSize = BLOCK_COL_SIZE * BLOCK_ROW_SIZE;
 	int boardRowSize = boardColSize;
 	while(fixedCounter < amountOfHints){
-		rowIndex = (rand() % boardRowSize);
 		colIndex = (rand() % boardColSize);
+		rowIndex = (rand() % boardRowSize);
 		if(table[rowIndex][colIndex].fixed == 0){
 			table[rowIndex][colIndex].fixed = 1;
 			fixedCounter++;
@@ -153,6 +153,7 @@ int setCell(Cell** table, int cellRow, int cellCol, int cellValue){
 					printf("%s","Puzzle solved successfully\n");
 					return 1;
 				}else{
+					printBoard(table);
 					return 0;
 				}
 			}else{

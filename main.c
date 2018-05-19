@@ -10,7 +10,6 @@
 #include "MainAux.h"
 #include "Cell.h"
 #include "def.h"
-#include "solverUnitTest.h"
 int main(int argc, char *argv[]) {
 	int seed;
 	Cell** gameBoard = NULL;
@@ -20,9 +19,7 @@ int main(int argc, char *argv[]) {
 	SP_BUFF_SET();
 	if(argc > 1){
 		sscanf(argv[1], "%d", &seed);
-		printf("%s","the seed is: ");
-		printf("%d", seed);
-		printf("%s","\n");
+		srand(seed);
 	}
 
 	tempBoard = setAllocatedMem();
