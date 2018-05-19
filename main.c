@@ -11,21 +11,26 @@
 #include "Cell.h"
 #include "def.h"
 #include "solverUnitTest.h"
-int main() {
-	/*
+int main(int argc, char *argv[]) {
+	int seed;
 	Cell** gameBoard = NULL;
 	Cell** solvedBoard = NULL;
 	Cell** tempBoard = NULL;
 
 	SP_BUFF_SET();
-	srand(1);
+	if(argc > 1){
+		sscanf(argv[1], "%d", &seed);
+		printf("%s","the seed is: ");
+		printf("%d", seed);
+		printf("%s","\n");
+	}
 
 	tempBoard = setAllocatedMem();
 	gameBoard = setAllocatedMem();
 	solvedBoard = setAllocatedMem();
 
-	gameLoop(gameBoard, solvedBoard, tempBoard);*/
-	testSolver();
+	gameLoop(gameBoard, solvedBoard, tempBoard);
+
 
 	return 0;
 }

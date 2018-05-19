@@ -58,7 +58,10 @@ int initGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard) {
 		/* EOF CASE */
 		return -1;
 	}
-	sscanf(input, "%d", &numOfHint);
+
+	if(sscanf(input, "%d", &numOfHint) != 1){
+		exitGame(gameBoard, solvedBoard, tempBoard);
+	}
 	while (numOfHint > 80 || numOfHint < 0) {
 		printf("%s",
 				"Error: Invalid number of cells to fill (should be between 0 and 80)\n");
