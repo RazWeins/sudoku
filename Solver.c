@@ -12,7 +12,15 @@
 #include "def.h"
 
 
-/* resets cell num to 0 */
+/*
+ * Function:  resetCell
+ * --------------------
+ *  resets cell num to 0 and put 0 in array of the previous numbers it tried during backtracking
+ *
+ *  table: 2d array containing sudoku cells
+ *	cellRow: row of cell to reset
+ *	cellCol: column of cell to reset
+ */
 void resetCell(Cell** table, int cellRow, int cellCol){
 	int i;
 	table[cellRow][cellCol].currentNum = 0;
@@ -23,7 +31,16 @@ void resetCell(Cell** table, int cellRow, int cellCol){
 
 }
 
-/* updates a cell with a valid numbers */
+/*
+ * Function:  updateCell
+ * --------------------
+ *  updates cell with a new number with one of it's valid numbers
+ *
+ *  table: 2d array containing sudoku cells
+ *  numIndex: index of valid number from the cell valid numbers array
+ *	cellRow: row of cell to reset
+ *	cellCol: column of cell to reset
+ */
 void updateCell(Cell** table, int numIndex, int cellRow, int cellCol){
 
 	int num;

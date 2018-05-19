@@ -10,13 +10,9 @@
 #include "MainAux.h"
 #include "Cell.h"
 #include "def.h"
+#include "solverUnitTest.h"
 int main() {
-
-	/* Declarations */
-	int boardRowSize = BLOCK_COL_SIZE * BLOCK_ROW_SIZE;
-	int boardColSize = boardRowSize;
-	int i;
-
+	/*
 	Cell** gameBoard = NULL;
 	Cell** solvedBoard = NULL;
 	Cell** tempBoard = NULL;
@@ -24,16 +20,12 @@ int main() {
 	SP_BUFF_SET();
 	srand(1);
 
-	tempBoard = (Cell **) malloc(boardRowSize * sizeof(Cell*));
-	gameBoard = (Cell **) malloc(boardRowSize * sizeof(Cell*));
-	solvedBoard = (Cell **) malloc(boardRowSize * sizeof(Cell*));
-	for (i = 0; i < boardRowSize; i++) {
-		solvedBoard[i] = (Cell *) malloc(boardColSize * sizeof(Cell));
-		gameBoard[i] = (Cell *) malloc(boardColSize * sizeof(Cell));
-		tempBoard[i] = (Cell *) malloc(boardColSize * sizeof(Cell));
-	}
+	tempBoard = setAllocatedMem();
+	gameBoard = setAllocatedMem();
+	solvedBoard = setAllocatedMem();
 
-	gameLoop(gameBoard, solvedBoard, tempBoard);
+	gameLoop(gameBoard, solvedBoard, tempBoard);*/
+	testSolver();
 
 	return 0;
 }

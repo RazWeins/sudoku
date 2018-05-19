@@ -12,4 +12,6 @@
 
 void gameLoop(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard);
 
+Cell** setAllocatedMem();
+
 #endif /* MAINAUX_H_ */

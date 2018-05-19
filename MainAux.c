@@ -6,10 +6,30 @@
  */
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "Parser.h"
 #include "Game.h"
+#include "def.h"
 
-/* TODO check EOF */
+Cell** setAllocatedMem(){
+	int boardRowSize = BLOCK_COL_SIZE * BLOCK_ROW_SIZE;
+	int boardColSize = boardRowSize;
+	int i;
+
+	Cell** temp = (Cell **) malloc(boardRowSize * sizeof(Cell*));
+	if(temp == NULL){
+		printf("%s","Error: foo has failed\n");
+		return NULL;
+	}
+	for (i = 0; i < boardRowSize; i++) {
+		temp [i] = (Cell *) malloc(boardColSize * sizeof(Cell));
+		if(temp[i] == NULL){
+				printf("%s","Error: foo has failed\n");
+				return NULL;
+			}
+	}
+	return temp;
+}
 
 /* get the input from the user until reached EOF */
 int getInput(char input[], int command[]) {
