@@ -168,9 +168,14 @@ int isSolved(Cell** table){
 int setCell(Cell** table, int cellRow, int cellCol, int cellValue){
 	int fixedFlag = table[cellRow - 1][cellCol - 1].fixed;
 	if(!fixedFlag){
+		if(cellValue == table[cellRow - 1][cellCol - 1].currentNum){
+			printBoard(table);
+			return 0;
+		}
 		if(cellValue == 0){
 			table[cellRow - 1][cellCol - 1].currentNum = 0;
 			table[cellRow - 1][cellCol - 1].isInput = 0;
+			printBoard(table);
 			return 0;
 		}else{
 			if(validAssignment(table, cellValue, cellRow - 1, cellCol - 1) == 0){

@@ -28,8 +28,10 @@ enum COMMAND{
  *
  *  input: string of the input by the user
  *  command: array holding types of commands
+ *
+ *  returns: -1 if input is empty or 0 if valid
  */
-void parseCommand(char* input, int* command);
+int parseCommand(char* input, int* command);
 
 /*
  * Function:  validInput
@@ -41,6 +43,14 @@ void parseCommand(char* input, int* command);
  */
 int validInput(int* command);
 
+/*
+ * Function:  parseHint
+ * --------------------
+ * if the read was successful the function returned
+ * the number of hints, else return -1
+ *
+ *  returns: number of hints if read was not successful return -1
+ */
 int parseHint();
 
 

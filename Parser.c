@@ -6,7 +6,7 @@
  */
 #include <stdio.h>
 #include <string.h>
-
+#include "Game.h"
 enum COMMAND{
 	set,
 	hint,
@@ -18,13 +18,17 @@ enum COMMAND{
 
 
 
-void parseCommand(char* input, int* command){
+int parseCommand(char* input, int* command){
 	const char delim[7] = " \t\r\n";
 	char *token;
 	int i;
 	token = strtok(input,delim);
 	for(i = 0; i < 4; i++){
 		command[i] = -1;
+	}
+	if(token == NULL){
+		command[0] = error;
+		return -1;
 	}
 	/* Get the command type */
 	if(strcmp(token,"set") == 0){
@@ -61,17 +65,23 @@ void parseCommand(char* input, int* command){
 	if(token!= NULL){
 		sscanf(token, "%d", &command[3]);
 	}
+	return 0;
 }
 
 int validInput(int* command){
 	if(command[0] == 5){
 		return -1;
 	}
+	if(command[0] == 0 && (command[1] == -1 || command[2] == -1 || command[3] == -1)){
+		return -1;
+	}if(command[0] == 1 && (command[1] == -1 || command[2] == -1)){
+		return -1;
+	}
 	return 0;
 }
 
-/* if the read was successful the function returned the number of hints, else return -1 */
-int parseHint(){
+
+int parseHint(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard){
 	char input[1024];
 	char *token;
 	const char delim[7] = " \t\r\n";
@@ -79,16 +89,18 @@ int parseHint(){
 	printf("%s", "Please enter the number of cells to fill [0-80]:\n");
 	if (fgets(input, 1024, stdin) == NULL) {
 		/* EOF CASE */
-		return -1;
+		exitGame(gameBoard, solvedBoard, tempBoard);
 	}
 	token = strtok(input,delim);
+	if(token == NULL){
+		return -2;/* blank row, don't exit */
+	}
 	if(sscanf(token, "%d", &numOfHint) != 1){
 		return -1;
 	}
 	token = strtok(NULL,delim);
 	if(token != NULL){
 		printf("%s","Error: invalid command\n");
-
 	}
 	return numOfHint;
 }

@@ -69,17 +69,11 @@ int getInput(char input[], int command[]) {
  */
 int initGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard) {
 	int numOfHint;
-	numOfHint = parseHint();
-	if(numOfHint == -1){
-		exitGame(gameBoard, solvedBoard, tempBoard);
-	}
+	numOfHint = parseHint(gameBoard, solvedBoard, tempBoard);
 	while (numOfHint > 80 || numOfHint < 0) {
 		printf("%s",
 				"Error: Invalid number of cells to fill (should be between 0 and 80)\n");
-		numOfHint = parseHint();
-		if(numOfHint == -1){
-			exitGame(gameBoard, solvedBoard, tempBoard);
-		}
+		numOfHint = parseHint(gameBoard, solvedBoard, tempBoard);
 	}
 	puzzleGeneration(gameBoard, solvedBoard, tempBoard, numOfHint);
 	printBoard(gameBoard);
