@@ -57,7 +57,7 @@ void printBoard(Cell** table){
 	printf("%s", "----------------------------------\n");
 }
 
-/* initializes board with zeros */
+
 void boardInit(Cell** table){
 	int i, j, k;
 	int boardRow = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;
@@ -78,6 +78,14 @@ void boardInit(Cell** table){
 	}
 }
 
+/*
+ * Function:  setHints
+ * --------------------
+ *  setting random cells as hints by making them fixed
+ *
+ *  amountOfHints: number of hints wanted
+ *
+ */
 void setHints(Cell** table, int amountOfHints){
 	int fixedCounter = 0;
 	int rowIndex = 0;
@@ -94,7 +102,15 @@ void setHints(Cell** table, int amountOfHints){
 	}
 }
 
-/* making the board ready for a game, setting fixed numbers */
+/*
+ * Function:  createGameBoard
+ * --------------------
+ *  copies the solvedboard's fixed cells numbers to gameboard
+ *
+ *  gameBoard: 2d array holding a sudoku board, it holds the board the user is playing on
+ *  solvedBoard: 2d array holding a sudoku board, it holds a solved board
+ *
+ */
 void createGameBoard(Cell** gameBoard, Cell** solvedBoard){
 	int i, j;
 	int isFixed;
@@ -122,6 +138,17 @@ void puzzleGeneration(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, in
 	createGameBoard(gameBoard, solvedBoard);
 }
 
+/*
+ * Function:  isSolved
+ * --------------------
+ *  checks if all cells has a number different from zero,
+ *   if yes it means the board is solved
+ *
+ *  table: 2d array holding a sudoku board
+ *
+ *  returns: 1 if the board is solved, 0 if the board is not solved
+ *
+ */
 int isSolved(Cell** table){
 	int i, j;
 	int boardRow = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;
@@ -137,7 +164,7 @@ int isSolved(Cell** table){
 	return 1;
 }
 
-/* updates a cell with a valid numbers, returns 1 if board is solved else returns 0 */
+
 int setCell(Cell** table, int cellRow, int cellCol, int cellValue){
 	int fixedFlag = table[cellRow - 1][cellCol - 1].fixed;
 	if(!fixedFlag){
@@ -168,7 +195,7 @@ int setCell(Cell** table, int cellRow, int cellCol, int cellValue){
 	return 0;
 }
 
-/* returns hint at (cellRow,cellCol).*/
+
 void hintCell(Cell** solvedBoard, int cellRow, int cellCol){
 	int hint = solvedBoard[cellRow - 1][cellCol - 1].currentNum;
 
@@ -177,7 +204,15 @@ void hintCell(Cell** solvedBoard, int cellRow, int cellCol){
 	printf("%s", "\n");
 }
 
-/* copies the actual values of one board to another board */
+/*
+ * Function:  copyBoard
+ * --------------------
+ * copies srcBoard board to dstBoard
+ *
+ *  dstBoard: 2d array holding a sudoku board, copy destination
+ *  srcBoard: 2d array holding a sudoku board, copy source
+ *
+ */
 void copyBoard(Cell** dstBoard, Cell** srcBoard){
 	int i, j;
 	int boardRow = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;
@@ -193,24 +228,35 @@ void copyBoard(Cell** dstBoard, Cell** srcBoard){
 }
 
 void validateBoard(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard){
-	int solveFlag;
-
+	int solveFlag = 0;
+	boardInit(tempBoard);
 	copyBoard(tempBoard, gameBoard);
-
 	solveFlag = sudokuSolver(tempBoard);
+
 	if(solveFlag == 0){
 		printf("%s","Validation failed: board is unsolvable\n");
 	}else{
+		boardInit(solvedBoard);
 		copyBoard(solvedBoard, tempBoard);
 		printf("%s","Validation passed: board is solvable\n");
 	}
 }
 
 void exitGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard){
-	free(gameBoard);
-	free(solvedBoard);
+	int boardRowSize = BLOCK_COL_SIZE * BLOCK_ROW_SIZE;
+	int i;
+	for (i = 0; i < boardRowSize; i++) {
+		free(tempBoard[i]);
+	}
+	for (i = 0; i < boardRowSize; i++) {
+		free(solvedBoard[i]);
+	}
+	for (i = 0; i < boardRowSize; i++) {
+		free(gameBoard[i]);
+	}
 	free(tempBoard);
-
+	free(solvedBoard);
+	free(gameBoard);
 	printf("%s","Exiting...\n");
 	exit(0);
 }

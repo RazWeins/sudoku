@@ -49,7 +49,17 @@ void updateCell(Cell** table, int numIndex, int cellRow, int cellCol){
 	table[cellRow][cellCol].prevNums[num - 1] = 1;
 }
 
-/* checks if a given number is in a specific row */
+/*
+ * Function:  rowCheck
+ * --------------------
+ *  checks if a given number is in a specific row
+ *
+ *  table: 2d array containing sudoku cells
+ *  num: number to check
+ *	cellRow: row to check
+ *
+ *	returns: -1 if number already appears in row, else it returns 0
+ */
 int rowCheck(Cell** table, int num, int cellRow){
 	int i, numCompare;
 	int rowSize = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;
@@ -64,7 +74,17 @@ int rowCheck(Cell** table, int num, int cellRow){
 	return 0;
 }
 
-/* checks if a given number is in a specific column */
+/*
+ * Function:  colCheck
+ * --------------------
+ *  checks if a given number is in a specific col
+ *
+ *  table: 2d array containing sudoku cells
+ *  num: number to check
+ *	cellCol: column to check
+ *
+ *	returns: -1 if number already appears in row, else it returns 0
+ */
 int colCheck(Cell** table, int num,  int cellCol){
 	int i, numCompare;
 	int colSize = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;
@@ -79,7 +99,15 @@ int colCheck(Cell** table, int num,  int cellCol){
 	return 0;
 }
 
-/* gets the current block last column */
+/*
+ * Function:  getcurrentblockCol
+ * --------------------
+ *  calculates the ending column of the block of the column cellCol
+ *
+ *	cellCol: column to check
+ *
+ *	returns: number of ending column of the block of the column cellCol
+ */
 int getcurrentblockCol(int cellCol){
 	int boardSize = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;
 	int i = BLOCK_COL_SIZE - 1;
@@ -94,7 +122,15 @@ int getcurrentblockCol(int cellCol){
 	return -1;
 }
 
-/* gets the current block last row */
+/*
+ * Function:  getcurrentblockRow
+ * --------------------
+ *  calculates the ending row of the block of the column cellRow
+ *
+ *	cellRow: row to check
+ *
+ *	returns: number of ending row of the block of the column cellRow
+ */
 int getcurrentblockRow(int cellRow){
 	int boardSize = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;
 	int i = BLOCK_ROW_SIZE - 1;
@@ -109,7 +145,20 @@ int getcurrentblockRow(int cellRow){
 	return -1;
 }
 
-/* checks if a given number is in a specific block */
+/*
+ * Function:  blockCheck
+ * --------------------
+ *  checks if numToCheck is in the block of the cell
+ *  at column of cellCol and row of cellRow in table
+ *
+ *	table: 2d array containing sudoku cells
+ *	numToCheck: number we want to check
+ *	cellRow: cell's row
+ *	cellCol: cells's column
+ *
+ *	returns: 0 numToCheck is not in the block,
+ *			-1 numToCheck is in the block
+ */
 int blockCheck(Cell** table,int numToCheck , int cellRow, int cellCol){
 	int currentNum;
 	int i,j;
@@ -130,7 +179,7 @@ int blockCheck(Cell** table,int numToCheck , int cellRow, int cellCol){
 	return 0;
 }
 
-/* checks if a number is a valid assignment by both row, column and block */
+
 int validAssignment(Cell** table, int numToCheck, int cellRow, int cellCol){
 	int temp = 0;
 
@@ -149,9 +198,18 @@ int validAssignment(Cell** table, int numToCheck, int cellRow, int cellCol){
 	return 0;
 }
 
-/* check which numbers are available besides the current number
- * because we chose already this number and it was'nt good so
- * we should'nt try it again */
+/*
+ * Function:  availableNumbers
+ * --------------------
+ * 	checks which numbers are available to the cell
+ * 	at column of cellCol and row of cellRow and updates
+ * 	the validNums array with them and the limit field accordingly
+ *
+ *	table: 2d array containing sudoku cells
+ *	cellRow: cell's row
+ *	cellCol: cells's column
+ *
+ */
 void availableNumbers(Cell** table, int cellRow, int cellCol){
 	int prevNumFlag;
 	int counter = 0;/* counts the amount of valid numbers*/
@@ -168,7 +226,20 @@ void availableNumbers(Cell** table, int cellRow, int cellCol){
 	table[cellRow][cellCol].limit = counter;
 }
 
-/* random backtrack algorithm */
+/*
+ * Function:  rndBacktrack
+ * --------------------
+ * 	random back tracking algorithm
+ *
+ *	table: 2d array containing sudoku cells
+ *	cellRow: cell's row
+ *	cellCol: cells's column
+ *	boardSize: size of sudoku board
+ *
+ *	returns: -1 if generated board successfully,
+ *			  0 if couldn't generate board successfully
+ *
+ */
 int rndBacktrack(Cell** table, int cellRow, int cellCol, int boardSize){
 	int limit;
 	int rndIndex;
@@ -213,14 +284,27 @@ int rndBacktrack(Cell** table, int cellRow, int cellCol, int boardSize){
 	return -1;
 }
 
-/* wrapper for the random backtrack algorithm */
+
 void sudokuGenerator(Cell** table){
 
 	int boardSize = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;
 	rndBacktrack(table, 0, 0, boardSize);
 }
 
-/* deterministic backtrack algorithm */
+/*
+ * Function:  dtrBacktrack
+ * --------------------
+ * 	deterministic back tracking algorithm
+ *
+ *	table: 2d array containing sudoku cells
+ *	cellRow: cell's row
+ *	cellCol: cells's column
+ *	boardSize: size of sudoku board
+ *
+ *	returns: -1 if solved board successfully,
+ *			  0 if couldn't solve board successfully
+ *
+ */
 int dtrBacktrack(Cell** table, int cellRow, int cellCol, int boardSize){
 	int limit;
 	int numIndex;
@@ -275,7 +359,7 @@ int dtrBacktrack(Cell** table, int cellRow, int cellCol, int boardSize){
  return -1;
 }
 
-/* wrapper for the deterministic backtrack algorithm */
+
 int sudokuSolver(Cell** table){
 
 	int boardSize = BLOCK_ROW_SIZE * BLOCK_COL_SIZE;

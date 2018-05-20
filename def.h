@@ -7,7 +7,7 @@
 
 #ifndef DEF_H_
 #define DEF_H_
-#define BLOCK_COL_SIZE 3
-#define BLOCK_ROW_SIZE 3
+#define BLOCK_COL_SIZE 3 /* size of column of a block */
+#define BLOCK_ROW_SIZE 3 /* size of row of a block */
 
 #endif /* DEF_H_ */

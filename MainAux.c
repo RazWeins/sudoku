@@ -18,20 +18,29 @@ Cell** setAllocatedMem(){
 
 	Cell** temp = (Cell **) malloc(boardRowSize * sizeof(Cell*));
 	if(temp == NULL){
-		printf("%s","Error: foo has failed\n");
+		printf("%s","Error: setAllocatedMem has failed\n");
 		return NULL;
 	}
 	for (i = 0; i < boardRowSize; i++) {
 		temp [i] = (Cell *) malloc(boardColSize * sizeof(Cell));
 		if(temp[i] == NULL){
-				printf("%s","Error: foo has failed\n");
+				printf("%s","Error: setAllocatedMem has failed\n");
 				return NULL;
 			}
 	}
 	return temp;
 }
 
-/* get the input from the user until reached EOF */
+/*
+ * Function:  getInput
+ * --------------------
+ *  gets input from user and uses parseCommand to parse it
+ *  if command is not a valid command it keeps looping until
+ *  it gets a valid command
+ *
+ *  returns: -1 if there's EOF and returns 0 if not
+ *
+ */
 int getInput(char input[], int command[]) {
 	if (fgets(input, 1024, stdin) == NULL) {
 		/* EOF CASE */
@@ -48,32 +57,48 @@ int getInput(char input[], int command[]) {
 	return 0;
 }
 
-/* gets the number of hints from the user and initialize the boards accordingly
- * if EOF was entering the function returns -1, else 0*/
+/*
+ *  Function:  initGame
+ * --------------------
+ *  gets the number of hints from the user and initialize
+ *  the boards accordingly with puzzleGeneration
+ *  then prints the created gameBoard using printBoard
+ *
+ *  returns: -1 if there's EOF else returns 0
+ *
+ */
 int initGame(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard) {
-	char input[1024];
 	int numOfHint;
-	printf("%s", "Please enter the number of cells to fill [0-80]:\n");
-	if (fgets(input, 1024, stdin) == NULL) {
-		/* EOF CASE */
-		return -1;
-	}
-
-	if(sscanf(input, "%d", &numOfHint) != 1){
+	numOfHint = parseHint();
+	if(numOfHint == -1){
 		exitGame(gameBoard, solvedBoard, tempBoard);
 	}
 	while (numOfHint > 80 || numOfHint < 0) {
 		printf("%s",
 				"Error: Invalid number of cells to fill (should be between 0 and 80)\n");
-		printf("%s", "Please enter the number of cells to fill [0-80]:\n");
-		fgets(input, 1024, stdin);
-		sscanf(input, "%d", &numOfHint);
+		numOfHint = parseHint();
+		if(numOfHint == -1){
+			exitGame(gameBoard, solvedBoard, tempBoard);
+		}
 	}
 	puzzleGeneration(gameBoard, solvedBoard, tempBoard, numOfHint);
 	printBoard(gameBoard);
 	return 0;
 }
 
+/*
+ *  Function:  commmandRouter
+ * --------------------
+ *  checking type of command by value in first cell of command
+ *  then calls the right command
+ *
+ *  gameBoard: 2d array holding a sudoku board, it holds the board the user is playing on
+ *  solvedBoard: 2d array holding a sudoku board, it holds a solved board
+ *  tempBoard: 2d array holding a sudoku board, just a temp board,values doesn't matter
+ *  command: array holding:
+ *  [0]:type of command, [1]: value of cell's column, [2]: value of cell's row, [3]: value to set to.
+ *
+ */
 void commmandRouter(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int command[]) {
 	switch (command[0]) {
 	case 0:/* Set X Y Z */
@@ -86,7 +111,10 @@ void commmandRouter(Cell** gameBoard, Cell** solvedBoard, Cell** tempBoard, int 
 		validateBoard(gameBoard, solvedBoard, tempBoard);
 		break;
 	case 3:/* restart */
-		initGame(gameBoard, solvedBoard, tempBoard);
+		if(initGame(gameBoard, solvedBoard, tempBoard) == -1){
+			/* EOF CASE */
+			exitGame(gameBoard, solvedBoard, tempBoard);
+		}
 		break;
 	case 4:
 		exitGame(gameBoard, solvedBoard, tempBoard);

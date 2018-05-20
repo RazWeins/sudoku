@@ -19,15 +19,13 @@ enum COMMAND{
 
 
 void parseCommand(char* input, int* command){
-	/***************************************************************
-	 * get array of chars which represent the command from the user*
-	 * and change the result array accordingly. the first variable *
-	 * in the result array is the command type and the rest are the*
-	 * parameters for the command                                  *
-	 ***************************************************************/
 	const char delim[7] = " \t\r\n";
 	char *token;
+	int i;
 	token = strtok(input,delim);
+	for(i = 0; i < 4; i++){
+		command[i] = -1;
+	}
 	/* Get the command type */
 	if(strcmp(token,"set") == 0){
 		command[0] = set;
@@ -48,47 +46,52 @@ void parseCommand(char* input, int* command){
 		sscanf(token, "%d", &command[2]);
 	}
 	token = strtok(NULL,delim);
+	if((command[0] == 1) && (token == NULL)){
+		/* checks if hint is the command and the two params is supplied */
+		printf("%s","Error: invalid command\n");
+	}
 	if(token!= NULL){
 		sscanf(token, "%d", &command[1]);
 	}
 	token = strtok(NULL,delim);
+	if((command[0] == 0) && (token == NULL)){
+		/* checks if set is the command and the three params is supplied */
+		printf("%s","Error: invalid command\n");
+	}
 	if(token!= NULL){
 		sscanf(token, "%d", &command[3]);
 	}
 }
 
-
-
-/* check if the input is in the correct range or if error accrued
- * return 0 if yes or -1 if not */
 int validInput(int* command){
 	if(command[0] == 5){
 		return -1;
 	}
-	if(command[0] == 0){
-		/* check that the arguments for the SET command are in the correct range */
-		if((command[1] < 1) || (command[1] > 9)){
-			return -1;
-		}
-		if((command[2] < 1) || (command[2] > 9)){
-			return -1;
-		}
-		if((command[3] < 0) || (command[3] > 9)){
-			return -1;
-		}
-	}else if(command[0] == 1){
-		/* check that the arguments for the SET command are in the correct range */
-		if((command[1] < 1) || (command[1] > 9)){
-			return -1;
-		}
-		if((command[2] < 1) || (command[2] > 9)){
-			return -1;
-		}
-	}
 	return 0;
 }
 
+/* if the read was successful the function returned the number of hints, else return -1 */
+int parseHint(){
+	char input[1024];
+	char *token;
+	const char delim[7] = " \t\r\n";
+	int numOfHint;
+	printf("%s", "Please enter the number of cells to fill [0-80]:\n");
+	if (fgets(input, 1024, stdin) == NULL) {
+		/* EOF CASE */
+		return -1;
+	}
+	token = strtok(input,delim);
+	if(sscanf(token, "%d", &numOfHint) != 1){
+		return -1;
+	}
+	token = strtok(NULL,delim);
+	if(token != NULL){
+		printf("%s","Error: invalid command\n");
 
+	}
+	return numOfHint;
+}
 
 
 
